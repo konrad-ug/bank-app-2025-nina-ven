@@ -18,8 +18,18 @@ class TestAccount:
 
 
     def test_is_code_correct_format(self):
-        account = Account("John", "Doe", '062113045', 200.0, "AAA_aa")
-        assert account.balance == 200
+        account1 = Account("John", "Doe", '062113045', 200.0, "AAA_aa")
+        account2 = Account("John", "Doe", '062113045', 200.0, "aa")
+        account3 = Account("John", "Doe", '062113045', 200.0, "PROM_aa")
+        account4 = Account("John", "Doe", '062113045', 200.0, "prom_xyz")
+        assert account1.balance == 200
+        assert account2.balance == 200
+        assert account3.balance == 200
+        assert account4.balance == 200
+
+    def test_does_code_work(self):
+        account = Account("John", "Doe", '06211304545', 200.0, "PROM_XYZ")
+        assert account.balance == 250
 
 
 

@@ -7,7 +7,7 @@ class Account:
         if type(pesel) != 'string' and len(self.pesel) != 11:
             self.pesel = "Invalid"
         self.promo_code = promo_code
-        if promo_code and len(promo_code)==7 and promo_code.startswith("PROM_"):
+        if promo_code and len(promo_code)==8 and promo_code.startswith("PROM_"):
             self.balance += 50
 
 
