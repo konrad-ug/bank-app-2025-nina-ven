@@ -10,6 +10,25 @@ class Account:
         if promo_code and len(promo_code)==8 and promo_code.startswith("PROM_") and yob_from_pesel(self.pesel)>1960:
             self.balance += 50
 
+    def transfer_in(self, amount: float):
+        if amount > 0:
+            self.balance += amount
+            return
+        else:
+            return "Niewłaściwe dane do transferu"
+            raise TypeError("Niewłaściwe dane do transferu")
+
+    def transfer_out(self, amount: float):
+        if amount > 0:
+            if amount > self.balance:
+                return "Brak fundów do transferu"
+                raise ValueError("Brak fundów do transferu")
+            self.balance -= amount
+            return
+        else:
+            return "Niewłaściwe dane do transferu"
+            raise TypeError("Niewłaściwe dane do transferu")
+
 
 
 def yob_from_pesel(pesel): # dla roku 1900+
