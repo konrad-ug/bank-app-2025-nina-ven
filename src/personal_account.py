@@ -1,5 +1,6 @@
 from src.account import Account
 class Account_personal(Account):
+    express_outgoing_transfer_fee = 1.0
     def __init__(self, first_name, last_name, pesel, balance=0.0, promo_code = None):
         self.first_name = first_name
         self.last_name = last_name
