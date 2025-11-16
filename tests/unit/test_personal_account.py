@@ -50,7 +50,8 @@ class TestPersonalAccount:
         assert account1.history == [100]
         account1.transfer_out(10)
         assert account1.history == [100,-10]
-
+        account1.express_transfer_out(50)
+        assert account1.history == [100,-10,-50,-1]
 
 
 
