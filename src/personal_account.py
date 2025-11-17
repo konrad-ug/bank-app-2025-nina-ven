@@ -13,6 +13,17 @@ class Account_personal(Account):
             self.balance += 50
         self.history=[]
 
+    def submit_for_loan(self, amount:float):
+        length = len(self.history)
+        if(length>=3) and self.history[-1]>0 and self.history[-2]>0 and self.history[-3]>0:
+            self.balance+=amount
+            return True  
+        if length>=5 and self.history[-5]+self.history[-4]+self.history[-3]+self.history[-2]+self.history[-1]>amount:
+            self.balance+=amount
+            return True 
+        else:
+            return False
+
 def yob_from_pesel(pesel): # dla roku 1900+
     if pesel.isdigit() : # isinstance(pesel, str) możnaby ale pesel jest już sprawdzany czy jest stringiem o długości 11
         if int(pesel[2:4]) > 12:

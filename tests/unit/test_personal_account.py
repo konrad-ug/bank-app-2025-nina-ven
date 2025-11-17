@@ -53,5 +53,30 @@ class TestPersonalAccount:
         account1.express_transfer_out(50)
         assert account1.history == [100,-10,-50,-1]
 
+    def test_does_loan_work(self):
+        account1 = Account_personal("John", "Doe", "59121304545")
+
+        account1.history=[50.0,30.0,100.0]
+        assert account1.submit_for_loan(30.0) == True
+        assert account1.balance == 30.0
+
+        account1.history=[50.0,30.0,100.0,-10.0,-10.0]
+        assert account1.submit_for_loan(30.0) == True
+        assert account1.balance == 60.0
+        
+    def test_does_loan_work_without_right_conditions(self):
+        account1 = Account_personal("John", "Doe", "59121304545")
+
+        assert account1.submit_for_loan(30.0) == False
+        assert account1.balance == 0.0
+
+        account1.history=[-5.0,-10.0,-20.0]
+        assert account1.submit_for_loan(30.0) == False
+        assert account1.balance == 0.0
+
+        account1.history=[-5.0,-10.0,-20.0,10,10]
+        assert account1.submit_for_loan(30.0) == False
+        assert account1.balance == 0.0
+
 
 
