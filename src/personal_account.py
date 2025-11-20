@@ -6,18 +6,48 @@ class Account_personal(Account):
         self.first_name = first_name
         self.last_name = last_name
         self.pesel = pesel
-        if type(pesel) != "string" and len(self.pesel) != 11:
+        if len(self.pesel) != 11:
             self.pesel = "Invalid"
         self.promo_code = promo_code
-        if promo_code and len(promo_code)==8 and promo_code.startswith("PROM_") and yob_from_pesel(self.pesel)>1960:
+        if promo_code and self.is_promo_code_correct():
             self.balance += 50
         self.history=[]
 
-def yob_from_pesel(pesel): # dla roku 1900+
-    if pesel.isdigit() : # isinstance(pesel, str) możnaby ale pesel jest już sprawdzany czy jest stringiem o długości 11
-        if int(pesel[2:4]) > 12:
-            return 2000 + int(pesel[:2])
+    def yob_from_pesel(self): # dla roku 1900+
+        if self.pesel.isdigit() : 
+            if int(self.pesel[2:4]) > 12:
+                return 2000 + int(self.pesel[:2])
+            else:
+                return 1900 + int(self.pesel[:2])
         else:
-            return 1900 + int(pesel[:2])
-    else:
-        return 0
+            return 0
+        
+    def is_promo_code_correct(self):
+        if len(self.promo_code)==8 and self.promo_code.startswith("PROM_") and self.yob_from_pesel()>1960:
+            return True
+        else:
+            return False
+
+    def submit_for_loan(self, amount:float):
+        length = len(self.history)
+        if(length>=3) and self.check_positivity_of_last_three():
+            self.balance+=amount
+            return True  
+        if length>=5 and self.check_positivity_of_sum_of_last_five(amount):
+            self.balance+=amount
+            return True 
+        else:
+            return False
+        
+    def check_positivity_of_last_three(self):
+        if self.history[-1]>0 and self.history[-2]>0 and self.history[-3]>0:
+            return True
+        else:
+            return False
+        
+    def check_positivity_of_sum_of_last_five(self,amount):
+        if self.history[-5]+self.history[-4]+self.history[-3]+self.history[-2]+self.history[-1]>amount:
+            return True
+        else:
+            return False
+
