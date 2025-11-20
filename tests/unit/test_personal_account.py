@@ -1,5 +1,4 @@
 from src.personal_account import  Account_personal
-from src.personal_account import yob_from_pesel
 import pytest
 
 class TestPersonalAccount:
@@ -52,11 +51,23 @@ class TestPromoCode:
         account = Account_personal(first_name, last_name, pesel, promo_code)
         assert account.balance == expected_balance
 
+class TestYob:
 
-    def test_yob_function(self):
-        assert yob_from_pesel("06211304545") == 2006
-        assert yob_from_pesel("Invalid") == 0
-        assert yob_from_pesel("81121304545") == 1981
+    @pytest.mark.parametrize("first_name, last_name, pesel, expected_year",
+    [
+        ["John", "Doe", "06211304545",2006],
+        ["John", "Doe", "222",0],
+        ["John", "Doe", "81121304545",1981]
+    ],
+    ids=[
+        "someone born during 21st century",
+        "someone with incorrect pesel",
+        "someone born during 20th century"
+    ])
+
+    def test_yob_function(self, first_name, last_name, pesel, expected_year):
+        account = Account_personal(first_name, last_name, pesel)
+        assert account.yob_from_pesel() == expected_year
 
 
 class TestLoan:
