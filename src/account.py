@@ -1,8 +1,8 @@
 class Account:
     express_outgoing_transfer_fee = 0.0
     def __init__(self):
-        self.history=[]
-        self.balance=0.0
+        self.history:list[float] = []
+        self.balance:float = 0.0
 
 
     def transfer_in(self, amount: float) -> None:

@@ -2,8 +2,8 @@ from src.account import Account
 class Account_personal(Account):
     express_outgoing_transfer_fee = 1.0
     def __init__(self, first_name:str, last_name:str, pesel:str, promo_code = None):
-        self.history = []
-        self.balance = 0.0
+        self.history:list[float] = []
+        self.balance:float = 0.0
         self.first_name = first_name
         self.last_name = last_name
         self.pesel = pesel
@@ -12,6 +12,7 @@ class Account_personal(Account):
         self.promo_code = promo_code
         if promo_code and self.is_promo_code_correct():
             self.balance += 50      
+
 
     def yob_from_pesel(self): # dla roku 1900+
         if self.pesel.isdigit() : 
@@ -45,7 +46,7 @@ class Account_personal(Account):
         else:
             return False
         
-    def is_sum_of_last_five_greater_than_amount(self,amount):
+    def is_sum_of_last_five_greater_than_amount(self, amount):
         if self.history[-5]+self.history[-4]+self.history[-3]+self.history[-2]+self.history[-1]>amount:
             return True
         else:
