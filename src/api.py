@@ -30,18 +30,28 @@ def get_account_count():
 def get_account_by_pesel(pesel):
     print("Get account with pesel recieved")
     account = registry.find_account_by_pesel(pesel)
-    if account is not None:
-        account_data = {"name":account.first_name, "surname":account.last_name, "pesel":account.pesel, "balance":account.balance}
-        return jsonify(account_data), 200
-    abort(404)
+    if not account:
+        return jsonify({"message": "Account not found"}), 404
+    account_data = {"name":account.first_name, "surname":account.last_name, "pesel":account.pesel, "balance":account.balance}
+    return jsonify(account_data), 200
+
 
 @app.route("/api/accounts/<pesel>", methods=['PATCH'])
 def update_account(pesel):
-    account = get_account_by_pesel(pesel)
-    return jsonify({"messge": "Account updated"})
+    account = registry.find_account_by_pesel(pesel)
+    if not account:
+        return jsonify({"message": "Account not found"}), 404
+    data = request.get_json()
+    if "name" in data:
+        account.first_name = data["name"]
+    if "surname" in data:
+        account.last_name = data["surname"]
+    return jsonify({"message": "Account updated"}), 200
 
 @app.route("/api/accounts/<pesel>", methods=['DELETE'])
 def delete_account(pesel):
-    get_account_by_pesel(pesel)
+    account=get_account_by_pesel(pesel)
+    if not account:
+        return jsonify({"message": "Account not found"}), 404
     registry.delete_account_by_pesel(pesel)
     return jsonify({"message": "Account deleted"}), 200
