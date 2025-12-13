@@ -22,7 +22,7 @@ class AccountRegistry:
     def return_all_accounts(self):
         return self.accounts
 
-    def return_lenth_of_all_accounts(self):
+    def return_length_of_all_accounts(self):
         return len(self.accounts)
                 
 

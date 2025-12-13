@@ -23,12 +23,12 @@ def get_all_accounts():
 @app.route("/api/accounts/count", methods=['GET'])
 def get_account_count():
     print("Get account count request recieved")
-    count = registry.return_lenth_of_all_accounts()
+    count = registry.return_length_of_all_accounts()
     return jsonify({"count": count}), 200
 
 @app.route("/api/accounts/<pesel>", methods=['GET'])
 def get_account_by_pesel(pesel):
-    print("Get account with pesel recieved")
+    print("Get account by pesel recieved")
     account = registry.find_account_by_pesel(pesel)
     if not account:
         return jsonify({"message": "Account not found"}), 404
