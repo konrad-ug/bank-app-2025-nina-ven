@@ -9,9 +9,12 @@ registry = AccountRegistry()
 def create_account():
     data = request.get_json()
     print(f"Create account request: {data}")
-    account = Account_personal(data["name"], data["surname"], data["pesel"])
-    registry.add_account(account)
-    return jsonify({"message": "Account created"}), 201
+    if registry.find_account_by_pesel(data["pesel"]) is None:
+        account = Account_personal(data["name"], data["surname"], data["pesel"])
+        registry.add_account(account)
+        return jsonify({"message": "Account created"}), 201
+    else:
+        return jsonify({"message": "Account of such pesel already exists"}), 409
 
 @app.route("/api/accounts", methods=['GET'])
 def get_all_accounts():

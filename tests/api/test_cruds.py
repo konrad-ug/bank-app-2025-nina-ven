@@ -41,6 +41,11 @@ class TestAPI:
         assert response.status_code == 201
         assert response.json()["message"]== "Account created"
 
+    def test_does_creating_account_with_used_pesel_work(self):
+        response = requests.post(self.url, json=self.person)
+        assert response.status_code == 409
+        assert response.json()["message"] == "Account of such pesel already exists"
+
     def test_get_all_accounts(self):
         response=requests.get(self.url)
         assert response.status_code == 200
