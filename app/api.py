@@ -8,13 +8,13 @@ registry = AccountRegistry()
 @app.route("/api/accounts", methods=['POST'])
 def create_account():
     data = request.get_json()
+    print("Create account request recieved")
     print(f"Create account request: {data}")
-    if registry.find_account_by_pesel(data["pesel"]) is None:
-        account = Account_personal(data["name"], data["surname"], data["pesel"])
-        registry.add_account(account)
-        return jsonify({"message": "Account created"}), 201
-    else:
+    if registry.find_account_by_pesel(data["pesel"]):
         return jsonify({"message": "Account of such pesel already exists"}), 409
+    account = Account_personal(data["name"], data["surname"], data["pesel"])
+    registry.add_account(account)
+    return jsonify({"message": "Account created"}), 201
 
 @app.route("/api/accounts", methods=['GET'])
 def get_all_accounts():
@@ -38,13 +38,14 @@ def get_account_by_pesel(pesel):
     account_data = {"name":account.first_name, "surname":account.last_name, "pesel":account.pesel, "balance":account.balance}
     return jsonify(account_data), 200
 
-
 @app.route("/api/accounts/<pesel>", methods=['PATCH'])
 def update_account(pesel):
+    data = request.get_json()
+    print("Update account recieved")
+    print(f"Update account request: {data}")
     account = registry.find_account_by_pesel(pesel)
     if not account:
         return jsonify({"message": "Account not found"}), 404
-    data = request.get_json()
     if "name" in data:
         account.first_name = data["name"]
     if "surname" in data:
@@ -53,8 +54,40 @@ def update_account(pesel):
 
 @app.route("/api/accounts/<pesel>", methods=['DELETE'])
 def delete_account(pesel):
-    account=get_account_by_pesel(pesel)
+    print("Delete account recieved")
+    account = registry.find_account_by_pesel(pesel)
     if not account:
         return jsonify({"message": "Account not found"}), 404
     registry.delete_account_by_pesel(pesel)
     return jsonify({"message": "Account deleted"}), 200
+
+@app.route("/api/accounts/<pesel>/transfer", methods=['POST'])
+def transfer(pesel):
+    data = request.get_json()
+    print("Transfer for account recieved")
+    print(f"Transfer for account request: {data}")
+    account = registry.find_account_by_pesel(pesel)
+    if not account:
+        return jsonify({"message": "Account not found"}), 404
+
+
+    if data["type"] == "incoming":
+        account.transfer_in(data["amount"])
+        return jsonify({"message": "The request has been accepted for processing"}), 200
+
+    elif data["type"] == "outgoing":
+        if account.balance<data["amount"]:
+            return jsonify({"message": "Transfer did not go through - Not enough funds"}), 422
+        account.transfer_out(data["amount"])
+        return jsonify({"message": "The request has been accepted for processing"}), 200
+
+    elif data["type"] == "express":
+        if account.balance<data["amount"]:
+            return jsonify({"message": "Transfer did not go through - Not enough funds"}), 422
+        account.express_transfer_out(data["amount"])
+        return jsonify({"message": "The request has been accepted for processing"}), 200
+
+    else:
+        return jsonify({"message": "Type does not exist"}), 422
+
+
