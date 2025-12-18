@@ -25,7 +25,7 @@ class TestAccountRegistry:
     def test_does_finding_account_bt_pesel_work(self):
         self.registry.accounts = [self.account1]
         assert self.registry.find_account_by_pesel("06211314545") == self.account1
-        assert self.registry.find_account_by_pesel("07211304545") == None
+        assert self.registry.find_account_by_pesel("07211304545") is None
 
     def test_does_returning_all_accounts_work(self):
         self.registry.accounts = [self.account1, self.account2]
@@ -33,6 +33,6 @@ class TestAccountRegistry:
     
     def test_does_returning_length_of_all_accounts_work(self):
         self.registry.accounts = [self.account1, self.account2]
-        assert self.registry.return_lenth_of_all_accounts() == 2
+        assert self.registry.return_length_of_all_accounts() == 2
 
         
