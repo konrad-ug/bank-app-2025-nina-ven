@@ -9,7 +9,7 @@ registry = AccountRegistry()
 def create_account():
     data = request.get_json()
     print(f"Create account request: {data}")
-    account = Account_personal(data("name"), data("surname"), data("pesel"))
+    account = Account_personal(data["name"], data["surname"], data["pesel"])
     registry.add_account(account)
     return jsonify({"message": "Account created"}), 201
 
