@@ -12,7 +12,7 @@ class TestPersonalAccount:
         assert self.account.last_name == "Doe"
         assert self.account.pesel == "06211304545"
 
-    def test_pesel_length(self):
+    def test_incorrect_pesel_length(self):
         account = Account_personal("John", "Doe", "062113045")
         account2 = Account_personal("John", "Doe", "062244333113045")
         assert account.pesel == "Invalid"

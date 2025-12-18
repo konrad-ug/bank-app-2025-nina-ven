@@ -13,11 +13,16 @@ class AccountRegistry:
             if account.pesel == pesel:
                 return account
         return None
+    
+    def delete_account_by_pesel(self, pesel:str) -> None:
+        account = self.find_account_by_pesel(pesel)
+        if account is not None:
+            self.accounts.remove(account)
         
     def return_all_accounts(self):
         return self.accounts
 
-    def return_lenth_of_all_accounts(self):
+    def return_length_of_all_accounts(self):
         return len(self.accounts)
                 
 
