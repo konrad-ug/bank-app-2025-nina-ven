@@ -41,6 +41,11 @@ class TestAPI:
         assert response.status_code == 201
         assert response.json()["message"]== "Account created"
 
+    def test_does_creating_account_with_used_pesel_work(self):
+        response = requests.post(self.url, json=self.person)
+        assert response.status_code == 409
+        assert response.json()["message"] == "Account of such pesel already exists"
+
     def test_get_all_accounts(self):
         response=requests.get(self.url)
         assert response.status_code == 200
@@ -69,6 +74,10 @@ class TestAPI:
         assert response2.json()["name"] == "Alyssa"
         assert response2.json()["surname"] == "Doe"
 
+    def test_nonexistent_account_update(self):
+        response = requests.patch(f"{self.url}/06214802343", json={"name": "Alyssa"})
+        assert response.status_code == 404
+        assert response.json()["message"] == "Account not found"
 
     def test_delete_account(self):
         response = requests.delete(f"{self.url}/06210802343")
@@ -76,6 +85,11 @@ class TestAPI:
         assert response.json()["message"] == "Account deleted"
         response2 = requests.get(f"{self.url}/06210802343")
         assert response2.status_code == 404
+
+    def test_delete_nonexistent_account(self):
+        response = requests.delete(f"{self.url}/06210802341")
+        assert response.status_code == 404
+        assert response.json()["message"] == "Account not found"
 
 
 

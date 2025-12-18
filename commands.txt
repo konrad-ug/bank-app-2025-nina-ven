@@ -7,3 +7,4 @@ flask --app app.api.py --debug run
 
 do uruchomienia jego testów
 python -m pytest tests/api/test_cruds.py
+python -m pytest tests/api/test_transfer.py
