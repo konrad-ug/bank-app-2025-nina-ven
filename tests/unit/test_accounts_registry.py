@@ -35,4 +35,10 @@ class TestAccountRegistry:
         self.registry.accounts = [self.account1, self.account2]
         assert self.registry.return_length_of_all_accounts() == 2
 
+    def test_does_deleting_from_registry_work(self):
+        self.registry.accounts = [self.account1, self.account2]
+        self.registry.delete_account_by_pesel("06230704545")
+        assert self.registry.accounts == [self.account1]
+
+
         
