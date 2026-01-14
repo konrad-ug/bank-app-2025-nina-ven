@@ -48,10 +48,10 @@ class Test_time:
         for _ in range(self.amount):
             response = requests.post(f"{self.url}/{self.person['pesel']}/transfer", json={"amount": 1, "type": "incoming"}, timeout=self.time)
             assert response.status_code == 200
-        response = requests.get(f"{self.url}/{self.person["pesel"]}")
+        response = requests.get(f"{self.url}/{self.person['pesel']}")
         assert response.status_code == 200
         assert response.json()["balance"] == self.amount*1
-        response = requests.delete(f"{self.url}/{self.person["pesel"]}")
+        response = requests.delete(f"{self.url}/{self.person['pesel']}")
         assert response.status_code == 200
 
 
