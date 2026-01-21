@@ -23,8 +23,8 @@ Scenario: User is able to update name of already created account
 Scenario: Created account has all fields correctly set
     Given Account registry is empty
     When I create an account using name: "maria", last name: "mc", pesel: "89092909872"
-    Then Then Account with pesel "89092909872" has "name" equal to "maria"
-    Then Then Account with pesel "89092909872" has "surname" equal to "mc"
+    Then Account with pesel "89092909872" has "name" equal to "maria"
+    And Account with pesel "89092909872" has "surname" equal to "mc"
 
 Scenario: User is able to delete created account
     Given Account registry is empty

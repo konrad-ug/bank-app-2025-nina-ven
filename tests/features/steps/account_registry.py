@@ -3,7 +3,7 @@ import requests
 
 URL = "http://localhost:5000"
 
-@step('I create an account using name: "{name}", last name: "{last_name}", pesel:"{pesel}"')
+@step('I create an account using name: "{name}", last name: "{last_name}", pesel: "{pesel}"')
 def create_account(context, name, last_name, pesel):
     json_body = { "name": f"{name}",
     "surname": f"{last_name}",
@@ -23,7 +23,7 @@ def clear_account_registry(context):
 @step('Number of accounts in registry equals: "{count}"')
 def is_account_count_equal_to(context, count):
     response = requests.get(URL + "/api/accounts/count")
-    assert response.json()["count"] == count
+    assert response.json()["count"] == int(count)
     assert response.status_code == 200
 
 @step('Account with pesel "{pesel}" exists in registry')
@@ -55,3 +55,8 @@ def field_equals_to(context, pesel, field, value):
         raise ValueError(f"Invalid field: {field}. Must be 'name' or 'surname'.")
     response = requests.get(URL + f"/api/accounts/{pesel}")
     assert response.json()[field] == value
+
+@then('Account with pesel: "{pesel}" has balance equal to "{value}"')
+def balance_equals_to(context, pesel, value):
+    response = requests.get(URL + f"/api/accounts/{pesel}")
+    assert response.json()["balance"] == int(value)
