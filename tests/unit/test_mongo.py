@@ -83,4 +83,4 @@ class TestMongoRepository:
 
         assert len(loaded) == 1
         assert loaded[0].balance == 5000.0
-        assert loaded[0].nip == "1234567890"
+        assert loaded[0].nip == '8461627562'
