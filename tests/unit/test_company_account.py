@@ -54,6 +54,13 @@ class TestCompanyAccount:
         account = Account_company("biodem", "8461627562")
         assert account.nip == "8461627562"
 
+    def test_nip_api_returns_status_none(self, mocker):
+        mock = mocker.patch("src.company_account.requests.get")
+        mock.return_value.status_code = 200
+        mock.return_value.json.return_value = {"result": {"subject": {}}}
+
+        account = Account_company("biodem", "8461627562")
+        assert account.nip == "8461627562"
 
 
     def test_does_history_work(self,mocker):
