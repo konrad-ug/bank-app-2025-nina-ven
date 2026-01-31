@@ -56,3 +56,31 @@ class TestMongoRepository:
         assert len(loaded) == 1
         assert loaded[0].first_name == "John"
         assert loaded[0].balance == 300.0
+
+    def test_load_all_business_account(self, mocker):
+        mock_collection = mocker.MagicMock()
+        fake_data = [
+            {
+                "company_name": "biodem",
+                "nip": '8461627562',
+                "balance": 5000.0,
+                "transfers": [5000],
+                "type": "business"
+            }
+        ]
+        mock_collection.find.return_value = fake_data
+
+        mock_db = mocker.MagicMock()
+        mock_db.__getitem__.return_value = mock_collection
+
+        mock_client_instance = mocker.MagicMock()
+        mock_client_instance.__getitem__.return_value = mock_db
+
+        mocker.patch('src.account_repository.MongoClient', return_value=mock_client_instance)
+
+        repo = MongoAccountsRepository()
+        loaded = repo.load_all()
+
+        assert len(loaded) == 1
+        assert loaded[0].balance == 5000.0
+        assert loaded[0].nip == "1234567890"
