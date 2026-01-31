@@ -90,7 +90,7 @@ class TestMongoRepository:
         fake_data = [
             {
                 "company_name": None,
-                "nip": "Invalid",
+                "nip": "11",
                 "balance": 0.0,
                 "transfers": [],
                 "type": "business"
