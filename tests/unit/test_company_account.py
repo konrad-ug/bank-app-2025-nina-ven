@@ -62,6 +62,14 @@ class TestCompanyAccount:
         account = Account_company("biodem", "8461627562")
         assert account.nip == "8461627562"
 
+    def test_nip_active_none_sets_nip(self, mocker):
+        mocker.patch(
+            "src.company_account.Account_company.is_nip_active_in_MF_registry",
+            return_value=None
+        )
+        account = Account_company("biodem", "8461627562")
+        assert account.nip == "8461627562"
+
     def test_does_history_work(self, mocker):
         mock = mocker.patch("src.company_account.requests.get")
         mock.return_value.status_code = 200
