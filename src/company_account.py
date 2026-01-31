@@ -13,11 +13,12 @@ class Account_company(Account):
         self.balance:float = 0.0
 
         if not self.is_nip_valid(nip):
-            self.nip= "Invalid"
-        elif self.is_nip_active_in_MF_registry(nip):
-            self.nip=nip
+            self.nip = "Invalid"
         else:
-            raise ValueError("NIP is not active in MF registry")
+            active = self.is_nip_active_in_MF_registry(nip)
+            if active is False:
+                raise ValueError("NIP is not active in MF registry")
+            self.nip = nip
 
     def is_nip_valid(self,nip):
         if isinstance(nip, str) and len(nip) == 10  and nip.isdigit():
@@ -38,17 +39,19 @@ class Account_company(Account):
                 return True
         return False
 
-    def is_nip_active_in_MF_registry(self, nip) -> bool :
-        today_date=datetime.today().strftime('%Y-%m-%d')
+    def is_nip_active_in_MF_registry(self, nip) -> bool | None:
+        today_date = datetime.today().strftime('%Y-%m-%d')
         url = f'{self.bank_url}api/search/nip/{nip}?date={today_date}'
-        print(f"sending requests to {url}")
-        response=requests.get(url)
-        print(f"Response status code: {response.json()}")
+
+        response = requests.get(url)
         if response.status_code != 200:
-            return False
+            return None
+
         data = response.json() or {}
-        result = data.get("result") or {}
-        subject = result.get("subject") or {}
+        subject = data.get("result", {}).get("subject", {})
         status = subject.get("statusVat")
+
+        if status is None:
+            return None
 
         return status == "Czynny"
