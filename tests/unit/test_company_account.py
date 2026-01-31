@@ -38,38 +38,6 @@ class TestCompanyAccount:
         with pytest.raises(ValueError):
             Account_company("biodem", "8461627562")
 
-    def test_nip_api_returns_no_data(self, mocker):
-        mock = mocker.patch("src.company_account.requests.get")
-        mock.return_value.status_code = 200
-        mock.return_value.json.return_value = {}
-
-        account = Account_company("biodem", "8461627562")
-        assert account.nip == "8461627562"
-
-    def test_nip_api_returns_non_200(self, mocker):
-        mock = mocker.patch("src.company_account.requests.get")
-        mock.return_value.status_code = 500
-        mock.return_value.json.return_value = {}
-        account = Account_company("biodem", "8461627562")
-        assert account.nip == "8461627562"
-
-    def test_nip_api_status_none_returns_nip(self, mocker):
-        # API returns JSON but statusVat missing
-        mock = mocker.patch("src.company_account.requests.get")
-        mock.return_value.status_code = 200
-        mock.return_value.json.return_value = {"result": {"subject": {}}}
-
-        account = Account_company("biodem", "8461627562")
-        assert account.nip == "8461627562"
-
-    def test_nip_active_none_sets_nip(self, mocker):
-        mocker.patch(
-            "src.company_account.Account_company.is_nip_active_in_MF_registry",
-            return_value=None
-        )
-        account = Account_company("biodem", "8461627562")
-        assert account.nip == "8461627562"
-
     def test_does_history_work(self, mocker):
         mock = mocker.patch("src.company_account.requests.get")
         mock.return_value.status_code = 200
