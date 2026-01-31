@@ -45,7 +45,7 @@ class Account_company(Account):
 
         response = requests.get(url)
         if response.status_code != 200:
-            return False
+            return None
 
         data = response.json() or {}
         subject = data.get("result", {}).get("subject", {})
