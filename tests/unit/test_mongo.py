@@ -7,12 +7,15 @@ from src.personal_account import Account_personal
 class TestMongoRepository:
     def test_save_all(self, mocker):
 
-        mock_collection = mocker.Mock()
-        mock_db = mocker.Mock()
+        mock_collection = mocker.MagicMock()
+        mock_db = mocker.MagicMock()
         mock_db.__getitem__.return_value = mock_collection
-        mock_client_instance = mocker.Mock()
+        mock_client_instance = mocker.MagicMock()
         mock_client_instance.__getitem__.return_value = mock_db
+
+
         mocker.patch('src.account_repository.MongoClient', return_value=mock_client_instance)
+
         repo = MongoAccountsRepository()
 
         acc1 = Account_personal("John", "Doe", "06211304545")
@@ -25,7 +28,7 @@ class TestMongoRepository:
         assert mock_collection.insert_one.call_count == 2
 
     def test_load_all(self, mocker):
-        mock_collection = mocker.Mock()
+        mock_collection = mocker.MagicMock()
         fake_data = [
             {
                 "first_name": "John",
@@ -39,10 +42,10 @@ class TestMongoRepository:
         ]
         mock_collection.find.return_value = fake_data
 
-        mock_db = mocker.Mock()
+        mock_db = mocker.MagicMock()
         mock_db.__getitem__.return_value = mock_collection
 
-        mock_client_instance = mocker.Mock()
+        mock_client_instance = mocker.MagicMock()
         mock_client_instance.__getitem__.return_value = mock_db
 
         mocker.patch('src.account_repository.MongoClient', return_value=mock_client_instance)
