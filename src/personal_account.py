@@ -1,4 +1,5 @@
 from src.account import Account
+from smtp.smtp import SMTPClient
 
 class Account_personal(Account):
     express_outgoing_transfer_fee = 1.0

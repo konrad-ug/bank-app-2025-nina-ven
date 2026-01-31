@@ -2,6 +2,7 @@ from datetime import datetime
 import os
 import requests
 from src.account import Account
+from smtp.smtp import SMTPClient
 
 class Account_company(Account):
     express_outgoing_transfer_fee = 5.0
