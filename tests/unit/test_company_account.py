@@ -6,17 +6,17 @@ from pytest_mock import MockFixture
 
 class TestCompanyAccount:
 
-    @pytest.fixture(autouse=True)
-    def account(self, mocker):
-        mock = mocker.patch('requests.get')
-        mock.return_value.status_code = 200
-        mock.return_value.json.return_value = {"result": {"subject": {"statusVat": "Czynny"}}}
-        self.account = Account_company('biodem', '8461627562')
 
-    def test_company_account_creation(self):
-        assert self.account.company_name == "biodem"
-        assert self.account.balance == 0
-        assert self.account.nip == '8461627562'
+    def test_company_account_creation(self,mocker):
+        mock = mocker.patch("src.company_account.requests.get")
+        mock.return_value.status_code = 200
+        mock.return_value.json.return_value = {
+            "result": {"subject": {"statusVat": "Czynny"}}
+        }
+        account = Account_company("biodem","8461627562")
+        assert account.company_name == "biodem"
+        assert account.balance == 0
+        assert account.nip == '8461627562'
 
     def test_nip_wrong_length(self,mocker):
         mock_get = mocker.patch("src.company_account.requests.get")
@@ -32,24 +32,32 @@ class TestCompanyAccount:
         assert account.nip == "Invalid"
         mock_get.assert_not_called()
 
-
     def test_inactive_company(self, mocker):
-        mock = mocker.patch('requests.get')
+        mock = mocker.patch("src.company_account.requests.get")
         mock.return_value.status_code = 200
-        mock.return_value.json.return_value = {"result": {"subject": {"statusVat": "Zwolniony"}}}
+        mock.return_value.json.return_value = {
+            "result": {"subject": {"statusVat": "Zwolniony"}}
+        }
+
         with pytest.raises(ValueError):
-            Account_company('biodem', '8461627562')
+            Account_company("biodem", "8461627562")
 
 
 
-    def test_does_history_work(self):
-        assert self.account.history == []
-        self.account.transfer_in(100)
-        assert self.account.history == [100]
-        self.account.transfer_out(10)
-        assert self.account.history == [100,-10]
-        self.account.express_transfer_out(50)
-        assert self.account.history == [100,-10,-50,-5]
+    def test_does_history_work(self,mocker):
+        mock = mocker.patch("src.company_account.requests.get")
+        mock.return_value.status_code = 200
+        mock.return_value.json.return_value = {
+            "result": {"subject": {"statusVat": "Czynny"}}
+        }
+        account = Account_company("biodem", "8461627562")
+        assert account.history == []
+        account.transfer_in(100)
+        assert account.history == [100]
+        account.transfer_out(10)
+        assert account.history == [100,-10]
+        account.express_transfer_out(50)
+        assert account.history == [100,-10,-50,-5]
 
 class TestLoan:
 
