@@ -1,6 +1,9 @@
 from src.account import Account
+from smtp.smtp import SMTPClient
+
 class Account_personal(Account):
     express_outgoing_transfer_fee = 1.0
+    history_email_text_template = "Personal account history: {}"
     def __init__(self, first_name:str, last_name:str, pesel:str, promo_code = None):
         self.history:list[float] = []
         self.balance:float = 0.0
