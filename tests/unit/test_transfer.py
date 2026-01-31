@@ -49,8 +49,12 @@ class Test_express_transfer_personal:
 class Test_express_transfer_company:
 
     @pytest.fixture(autouse=True)
-    def account(self):
-        self.account = Account_company('biodem','2749373834')
+    def account(self, mocker):
+        mocker.patch(
+            "src.company_account.Account_company.is_nip_active_in_MF_registry",
+            return_value=True
+        )
+        self.account = Account_company('biodem', '8461627562')
 
     @pytest.mark.parametrize("balance, amount, expected_balance",
     [

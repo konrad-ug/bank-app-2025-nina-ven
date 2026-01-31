@@ -41,19 +41,20 @@ class Account_company(Account):
                 return True
         return False
 
-    def is_nip_active_in_MF_registry(self, nip) -> bool :
+    def is_nip_active_in_MF_registry(self, nip) -> bool | None:
         today_date = datetime.today().strftime('%Y-%m-%d')
         url = f'{self.bank_url}api/search/nip/{nip}?date={today_date}'
-        print(f"sending requests to {url}")
+
         response = requests.get(url)
-        print(f"response status code: {response.json()}")
         if response.status_code != 200:
-            return False
+            return None
 
         data = response.json() or {}
-        result = data.get("result") or {}
-        subject = result.get("subject", {})
+        subject = data.get("result", {}).get("subject", {})
         status = subject.get("statusVat")
+
+        if status is None:
+            return None
 
         return status == "Czynny"
 
