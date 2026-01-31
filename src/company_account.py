@@ -2,7 +2,6 @@ from datetime import datetime
 import os
 import requests
 from src.account import Account
-from smtp.smtp import SMTPClient
 
 class Account_company(Account):
     express_outgoing_transfer_fee = 5.0
@@ -57,3 +56,12 @@ class Account_company(Account):
             return None
 
         return status == "Czynny"
+
+    def to_dict(self):
+        return {
+            "company_name": self.company_name,
+            "nip": self.nip,
+            "balance": self.balance,
+            "transfers": self.history,
+            "type": "business"
+        }

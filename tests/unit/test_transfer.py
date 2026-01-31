@@ -22,21 +22,6 @@ class TestTransfer:
         self.account.transfer_out(50.0)
         assert self.account.balance == 0
 
-    # @pytest.mark.parametrize("balance, amount, expected_balance",
-    # [
-    #     [200,50,150],
-    #     [100,1000,100],
-    # ],
-    # ids=[
-    #     "less money transfered than owned",
-    #     "more money transfered than owned",
-    # ])   
-
-    # def test_transfer_out(self, balance, amount, expected_balance):
-    #     self.account.balance=balance
-    #     self.account.transfer_out(amount)
-    #     assert self.account.balance == expected_balance
-
 class Test_express_transfer_personal:
 
     @pytest.fixture(autouse=True)

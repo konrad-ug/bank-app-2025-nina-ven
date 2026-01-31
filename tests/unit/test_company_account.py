@@ -1,8 +1,5 @@
-from src import account
 from src.company_account import  Account_company
 import pytest
-import requests
-from pytest_mock import MockFixture
 
 class TestCompanyAccount:
 

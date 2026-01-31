@@ -1,10 +1,10 @@
 from src.account import Account
-from smtp.smtp import SMTPClient
 
 class Account_personal(Account):
     express_outgoing_transfer_fee = 1.0
     history_email_text_template = "Personal account history: {}"
-    def __init__(self, first_name:str, last_name:str, pesel:str, promo_code = None):
+    def __init__(self, first_name: str, last_name: str, pesel: str, promo_code=None):
+        super().__init__()
         self.history:list[float] = []
         self.balance:float = 0.0
         self.first_name = first_name
@@ -54,4 +54,15 @@ class Account_personal(Account):
             return True
         else:
             return False
+
+    def to_dict(self):
+        return {
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "pesel": self.pesel,
+            "balance": self.balance,
+            "transfers": self.history,
+            "promo_code": self.promo_code,
+            "type": "personal"
+        }
 
