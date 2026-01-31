@@ -2,9 +2,11 @@ from datetime import datetime
 import os
 import requests
 from src.account import Account
+from smtp.smtp import SMTPClient
 
 class Account_company(Account):
     express_outgoing_transfer_fee = 5.0
+    history_email_text_template = "Company account history: {}"
     bank_url = os.getenv("BANK_APP_MF_URL", "https://wl-api.mf.gov.pl/")
     def __init__(self, company_name:str, nip:str):
         super().__init__()
