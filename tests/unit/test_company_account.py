@@ -47,9 +47,11 @@ class TestCompanyAccount:
         account = Account_company("biodem", "8461627562")
         assert account.nip == "8461627562"
 
-    def test_nip_api_non_200(self, mocker):
+    def test_nip_api_returns_non_200(self, mocker):
         mock = mocker.patch("src.company_account.requests.get")
         mock.return_value.status_code = 500
+        mock.return_value.json.return_value = {}
+
         account = Account_company("biodem", "8461627562")
         assert account.nip == "8461627562"
 
